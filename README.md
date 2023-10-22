@@ -9,7 +9,7 @@
                 ||     ||
 ```
 # k101 | learn basics of kernel hacking 
-[🇹🇷TR](docs/tr/README.md) 
+[🇬🇧 EN](README.md) | [🇹🇷 TR](docs/tr/README.md) 
 
 k101 is a CTF challenge that can teach you the basics of
 kernel hacking and can get you some hands-on practice.
