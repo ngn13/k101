@@ -1,0 +1,11 @@
+syntax on
+filetype plugin indent on
+set number
+set relativenumber
+set numberwidth=4
+set signcolumn="yes"
+set scrolloff=8
+set expandtab
+set shiftwidth=2
+set tabstop=2
+set softtabstop=2

@@ -1,0 +1,4 @@
+src/*.raw
+src/*.tar.gz
+src/linux
+src/mnt
