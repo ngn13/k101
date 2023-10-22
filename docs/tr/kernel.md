@@ -51,7 +51,7 @@ belleğine değerler yazmamıza izin verir. Bu durum belleği, dolayısı ile pr
 değiştirmemizi sağlar.
 
 - **Use-After-Free (UAF)**: Bellekten ayrılan herhangi bir alanın serbest bırakıldıktan sonra 
-kullanılmasıdır. Bu durumda program serbest bırakılan belleğe erişmeye çalışır. Bu duruma farklı 
+kullanılmasıdır. Bu durumda program serbest bırakılan belleğe erişmeye çalışır, dolaylı 
 olarak farklı bellek saldırılarına kapı açar.
 
 - **Buffer Overflow**: Herhangi birşey için bellekte açılan arabelleğin taşması durumunda ortaya çıkar.
