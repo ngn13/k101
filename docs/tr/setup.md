@@ -12,8 +12,9 @@ cd k101/src
 ```
 **Eğer Arch tabanlı bir dağıtımdaysanız** önce `arch-install-scripts`'i kurup ardından `root.sh` 
 scriptini çalıştırarak root dosya sistemini inşa edebilirsiniz. **Eğer arch tabanlı bir dağıtımda 
-değilseniz** önceden inşa edilmiş bir root dosya sistemini 
-[burdan](https://files.ngn13.fun/k101/root.tar.gz) indirebilirsiniz.
+değilseniz** önceden inşa edilmiş bir root dosya sistemini isterseniz:
+- [root.tar.gz](https://files.ngn13.fun/k101/root.tar.gz) (1.7G - Arşivden çıkarınca 6GB)
+- **SHA256 imzası**: `5df4f614b812a32483ea55ad0bd1b773ac543af74b1d8ac11463f14f0e952b38`
 
 [Bu araçları kurduktan sonra](https://www.kernel.org/doc/html/latest/process/changes.html)
 kernel'i indirmek ve derlemek için `kernel.sh` scriptini çalıştırın. Dilerseniz `vars.sh` 
