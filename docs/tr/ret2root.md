@@ -162,6 +162,7 @@ Burda calling convention'ları devreye giriyor, bu arkadaşlar fonksiyon çağr�
 hangi registerlarda tutulacağını ve dönüş değerlerinin hangi reigsterlara yazılacağını belirtiyor.
 
 Aşağıda linux `x86_64` calling convention'larının bir listesi:
+
 ![](../assets/registers.png)
 
 Burda görebileceğiniz gibi `prepare_kernel_cred` cred'e NULL parametresini `rdi` registerı aracılığı 
