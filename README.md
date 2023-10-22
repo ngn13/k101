@@ -1,3 +1,13 @@
+```
+ __________________
+< welcome to k101! >
+ ------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+```
 # k101 | learn basics of kernel hacking 
 [🇹🇷TR](docs/tr/README.md) 
 
