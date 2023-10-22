@@ -24,5 +24,17 @@ Root sistemi hazırladıktan sonra ve kernel'i başarı ile derledikten sonra si
 `qemu.sh` scriptini çalıştırın. Kernele verilen argümanlar ile oynamak adına yine `vars.sh` 
 scripti ile oynuyabilirsiniz
 
+Sistem açılınca **kullanıcı adı olarak** `root` ve **parola olarak** `k101` ile giriş yapabilirsiniz,
+ancak daha stabil bir shell istiyorsanız aynı kullanıcı ve parola ile port 2222'de SSH'a bağlanın:
+`ssh root@127.0.0.1 -p 2222`
+Benim önerim SSH'ı kullanmanız olacaktır. 
+
+Sisteme girdikten sonra zafiyetli sırdaki bölümde inceleyeceğimiz kernel modülünü ve en son yazıcağımız 
+root exploitini root'un ev dizininde (`/root`) bulabilirsiniz. Exploitimizi aşama aşama yazacağımızdan size 
+önerim kendi exploitiniz için ayrı bir dizin oluşturmanızdır.
+
+Ve evet makinede `vim` editörü ile beraber exploitinizi derlemek için gerekli olacak temel araçlar mevcut.
+Yani onları indirmek ile uğraşmak zorunda değilsiniz.
+
 ---
 [Önceki](kernel.md) | [Sıradaki](deeper.md)
