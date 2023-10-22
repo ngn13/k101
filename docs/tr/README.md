@@ -9,7 +9,7 @@
                 ||     ||
 ```
 # k101 | kernel kırmanın temellerini öğrenin 
-[🇬🇧EN](../../README.md)
+[🇬🇧 EN](../../README.md) | [🇹🇷 TR](README.md) 
 
 k101 size kernel kırmanın temellerini öğretecek 
 ve biraz pratik yapmanızı sağlayacak bir challenge.
