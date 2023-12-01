@@ -32,6 +32,6 @@ bölüm | açıklama | link
 --- | --- | --- 
 kernel 101 | kernel hakkında genel bilgi edinin | [git](kernel.md)
 kurulum | pratik ortamını nasıl kuracağınızı öğrenin | [git](setup.md)
-derinlere inmek | zafiyetli kernel modülünü yakından incele | [go](deeper.md)
+derinlere inmek | zafiyetli kernel modülünü yakından incele | [git](deeper.md)
 ilk exploit | ilk kernel exploitinizi yazın | [git](first.md)
 ret2root | exploitiniz ile root alın | [git](ret2root.md)
