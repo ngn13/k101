@@ -8,30 +8,28 @@
                 ||----w |
                 ||     ||
 ```
-# k101 | learn basics of kernel hacking 
-[🇬🇧 EN](README.md) | [🇹🇷 TR](docs/tr/README.md) 
+# k101 | kernel kırmanın temellerini öğrenin 
 
-k101 is a CTF challenge that can teach you the basics of
-kernel hacking and can get you some hands-on practice.
+k101 size kernel kırmanın temellerini öğretecek 
+ve biraz pratik yapmanızı sağlayacak bir challenge.
 
-if you need any help, or if you have any problems, 
-[feel free to create an issue](https://github.com/ngn13/k101/issues). 
-**please add** `[EN]` **to the title if you write the issue content in English!**
+eğer yardıma ihtiyaç duyarsanız, herhangi bir sorun yaşarsanız
+bir [issue oluşturmaktan çekinmeyin](https://github.com/ngn13/k101/issues).
 
-before you get any further here are some requirements:
-- you need a linux system with KVM/QEMU setup for the lab enviroment
-- you need general understanding of memory managment and ASM
-- you need general understanding of a linux based system
-- you need some general C knowledge
+başlamadan önce işte bazı gereksinimler:
+- lab ortamınızı kurabilmeniz adına bir KVM/QEMU kurulumu
+- genel bellek yönetimi ve ASM bilgisi
+- genel linux tabanlı sistem bilgisi
+- genel C bilgisi
 
-use the links below to start your journey
+aşağıdaki linkleri kullanarak macerana başlayabilirsin
 
-happy hacking!
+iyi eğlenceler!
 
-title | desc | link
---- | --- | --- 
-kernel 101 | learn about the kernel | [go](docs/en/kernel.md)
-setup | learn how to setup the lab enviroment | [go](docs/en/setup.md)
-going deeper | take a closer look at the vulnerable kernel module | [go](docs/en/deeper.md)
-first exploit | write your first kernel exploit | [go](docs/en/first.md)
-ret2root | get root with your exploit | [go](docs/en/ret2root.md)
+bölüm           | açıklama                                      | link
+--------------- | --------------------------------------------- | ------------------ 
+kernel 101      | kernel hakkında genel bilgi edinin            | [kernel.md](docs/kernel.md)
+kurulum         | pratik ortamını nasıl kuracağınızı öğrenin    | [setup.md](docs/setup.md)
+derinlere inmek | zafiyetli kernel modülünü yakından inceleyin  | [deeper.md](docs/deeper.md)
+ilk exploit     | ilk kernel exploitinizi yazın                 | [first.md](docs/first.md)
+ret2root        | exploitiniz ile root alın                     | [ret2root.md](docs/ret2root.md)

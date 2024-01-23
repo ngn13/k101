@@ -307,5 +307,7 @@ sh-5.1#
 ```
 root shellimizi elde ediyoruz. 
 
+### dip not
+
 ---
-[Önceki](first.md) | [Başa dön](README.md)
+[Önceki](first.md) | [Son söz](end.md)
