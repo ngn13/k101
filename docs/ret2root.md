@@ -163,7 +163,7 @@ hangi registerlarda tutulacağını ve dönüş değerlerinin hangi reigsterlara
 
 Aşağıda linux `x86_64` calling convention'larının bir listesi:
 
-![](../assets/registers.png)
+![](assets/registers.png)
 
 Burda görebileceğiniz gibi `prepare_kernel_cred` cred'e NULL parametresini `rdi` registerı aracılığı 
 ile geçeceğiz, ardından `prepare_kernel_cred`in dönüş değerini `rax`dan okuyup yine `commit_creds`e 
