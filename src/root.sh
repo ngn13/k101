@@ -3,10 +3,10 @@ source vars.sh
 
 if [ "$EUID" -eq 0 ]; then
   SUDO=""
-elif type "sudo" > /dev/null; then
-  SUDO="sudo"
 elif type "doas" > /dev/null; then
   SUDO="doas"
+elif type "sudo" > /dev/null; then
+  SUDO="sudo"
 else 
   echo ">> Install sudo, doas or run the script as root"
   exit 1
@@ -25,9 +25,8 @@ mkdir -p mnt
 $SUDO mount root.raw mnt
 
 echo ">> Installing base system"
-$SUDO pacstrap mnt base base-devel vim cowsay dhcpcd openssh linux-headers
+$SUDO pacstrap mnt base base-devel vim cowsay dhcpcd openssh linux-headers tmux
 $SUDO cp -r module mnt/root/module
-$SUDO cp -r exploit mnt/root/exploit
 echo ">> Running chroot commands"
 $SUDO chroot mnt /bin/bash -c "echo root:k101root | chpasswd"
 $SUDO chroot mnt /bin/bash -c "echo k101 > /etc/hostname"

@@ -57,18 +57,18 @@ Fakat şimdilik modülün kaynak kodunu inceleyelim.
 Bu dosya modülün C kaynak kodunu içeriyor.
 İlk olarak başta eklediğimiz header dosyaları var:
 ```c
-#include <linux/module.h>       
-#include <linux/kernel.h>       
-#include <linux/proc_fs.h>      
-#include <linux/uaccess.h>        
+#include <linux/proc_fs.h>
+#include <linux/uaccess.h>
+#include <linux/module.h>
+#include <linux/kernel.h>    
 ```
 Bu header dosyaları kernel modüllerine özel. `module.h` her modülün zorunlu olarak eklemesi gereken
 header. Bunun dışında diğer headerlar farklı yerlerde kullandığımız fonksiyonların tanımlarını içeriyor.
 
 Ardından `#define` ile tanımlanan bazı sabit değerlerimiz var:
 ```c
-#define PROCFS_MAX_SIZE         32
-#define PROCFS_NAME             "vuln"
+#define DEV_NAME "vuln"
+#define MAX_SIZE 32
 ```
 Bunların nerelerde kullanıldığını az sonra göreceğiz.
 
@@ -81,8 +81,8 @@ MODULE_LICENSE("GPL");
 Ardından bazı statik global değişkenleri tanımları görüyoruz:
 ```c
 static struct proc_dir_entry *proc_file;
-static char procfs_buffer[PROCFS_MAX_SIZE];
 static unsigned long procfs_buffer_size = 0;
+static char procfs_buffer[MAX_SIZE];
 ```
 Bildiğiniz gibi linux'da herşey bir dosya. Bu kernel modülü user-space ile iletişime geçmek için 
 bir `/proc` dosyası oluşturuyor. İlk değişken olan `proc_file`, daha sonra oluşturulacak 
@@ -95,18 +95,21 @@ kullandığımız bir değişken.
 kernel tarafından çağrılan bir fonksiyon. User-space programlarındaki `main` fonksiyonu gibi 
 düşünebilirsiniz:
 ```c
-int init_module(){
-  proc_file = proc_create(PROCFS_NAME, 0666, NULL, &fops);
-  memset(procfs_buffer, 'A', PROCFS_MAX_SIZE);
+int init_module()
+{
+
+  proc_file = proc_create(DEV_NAME, 0666, NULL, &fops);
+  memset(procfs_buffer, 'A', MAX_SIZE);
 
   if (proc_file == NULL) {
-    remove_proc_entry(PROCFS_NAME, NULL);
-    printk(KERN_ALERT "[vuln] Cannot create /proc/%s\n", PROCFS_NAME);
+    remove_proc_entry(DEV_NAME, NULL);
+    printk(KERN_ALERT "[vuln] Cannot create /proc/%s\n", DEV_NAME);
     return -ENOMEM;
   }
 
-  printk(KERN_INFO "[vuln] /proc/%s created\n", PROCFS_NAME);
+  printk(KERN_INFO "[vuln] /proc/%s created\n", DEV_NAME);
   return 0;
+
 }
 ```
 İlk olarak `proc_create` fonksiyonu ile `PROCFS_NAME` ismine, `0666` dosya izinlerine (`-rw-rw-rw-`) ve 
@@ -149,12 +152,18 @@ bıraktıktan sonra fonksiyonumuzdan 0 kodu, yani sorunsuz olarak dönüyoruz.
 
 Şimdi gelin `/proc` dosyasından okuma yapılınca çağrılan `procfile_read` fonksiyonuna bakalım:
 ```c
-static ssize_t procfile_read(struct file *file, char *buffer, size_t count, loff_t *offset){
-  char local[PROCFS_MAX_SIZE];
-  memcpy(local, procfs_buffer, PROCFS_MAX_SIZE);
-  printk(KERN_INFO "[vuln] Reading %d bytes\n", count);
+static ssize_t procfile_read(
+    struct file *file, char *buffer, size_t count, loff_t *offset)
+{
+
+  char local[MAX_SIZE];
+
+  memcpy(local, procfs_buffer, MAX_SIZE);
+  printk(KERN_INFO "[vuln]: Reading %d bytes\n", count);
   memcpy(buffer, local, count);
+
   return count;
+
 }
 ```
 Bu fonksiyonun ilk parametresi `/proc` dosyamıza giden bir pointer. `buffer` ise user-space'de olan 
@@ -178,16 +187,21 @@ okuma işleminin başarısız olduğunu düşünebilir.
 
 Şimdi ise `/proc` dosyamıza birşeyler yazılınca çağrılan `procfile_write` fonksiyonuna bakalım:
 ```c
-static ssize_t procfile_write(struct file *file, const char *buffer, size_t count, loff_t *offset){
+static ssize_t procfile_write(
+    struct file *file, const char *buffer, size_t count, loff_t *offset)
+{
+
   char local[8];
   procfs_buffer_size = count;
 
-  if (copy_from_user(procfs_buffer, buffer, count))
+  if (copy_from_user(procfs_buffer, buffer, procfs_buffer_size))
     return -EFAULT;
 
   memcpy(local, procfs_buffer, procfs_buffer_size);
-  printk(KERN_INFO "[vuln] Copied to buffer: %s", local);
+  printk(KERN_INFO "[vuln]: Copied to buffer: %s\n", local);
+
   return procfs_buffer_size;
+
 }
 ```
 Parametreler aynı, diğer fonksiyondaki gibi local bir buffer'ımız var, ancak bu buffer okuma 
@@ -210,9 +224,12 @@ buffer overflow zafiyetine sebebiyet veriyor.
 Son olarak `cleanup_module` fonksiyonumuz var. Bu fonksiyon modülümüz kernelden çıkartılınca 
 çağrılıyor:
 ```c
-void cleanup_module(){
-  remove_proc_entry(PROCFS_NAME, NULL);
-  printk(KERN_INFO "[vuln] /proc/%s removed\n", PROCFS_NAME);
+void cleanup_module()
+{
+
+  remove_proc_entry(DEV_NAME, NULL);
+  printk(KERN_INFO "[vuln] /proc/%s removed\n", DEV_NAME);
+
 }
 ```
 Sadece `remove_proc_entry`e `/proc` dosya adımızı veriyoruz, ikinci parametre yine ebeveyni belirtmek 
@@ -222,8 +239,11 @@ Sonrasında yine kayıtlara küçük bir mesaj bırakıyoruz.
 
 Aslında bir fonksiyonumuz daha var:
 ```c
-void cant_get_here(void){
+void cant_get_here(void)
+{
+
   printk(KERN_INFO "[vuln] How did we get here?\n");
+
 }
 ```
 Bu fonksiyonu ilk exploitimizi yazarken kullanacağız, sadece kernel kayıtlarına bir mesaj bırakıyor. Bunun dışında bu fonksiyon herhangi bir yerde çağrılmıyor ya da kullanılmıyor.  

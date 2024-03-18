@@ -16,7 +16,7 @@ scriptini çalıştırarak root dosya sistemini inşa edebilirsiniz.
 **Eğer arch tabanlı bir dağıtımda değilseniz** merak etmeyin! Önceden inşa edilmiş bir dosya sistemini 
 kullanabilirsiniz:
 - [root.tar.gz](https://files.ngn.tf/k101/root.tar.gz) (1.7G - Arşivden çıkarınca 6GB)
-- **SHA256 imzası**: `5df4f614b812a32483ea55ad0bd1b773ac543af74b1d8ac11463f14f0e952b38`
+- **SHA256 imzası**: `feb9cd20f01048620a50331e566053e96b925dfbace26478bb6351b765cc54b1`
 
 [Bu araçları kurduktan sonra](https://www.kernel.org/doc/html/latest/process/changes.html)
 kernel'i indirmek ve derlemek için `kernel.sh` scriptini çalıştırın. Dilerseniz `vars.sh` 
@@ -28,17 +28,17 @@ scripti ile oynuyabilirsiniz
 
 Sistem açılınca **kullanıcı adı olarak** `root` ve **parola olarak** `k101root` ile giriş yapabilirsiniz,
 ancak daha stabil bir shell istiyorsanız aynı kullanıcı ve parola ile port 2222'de SSH'a bağlanın:
-```
+```bash
 ssh root@127.0.0.1 -p 2222
 ```
 Benim önerim SSH'ı kullanmanız olacaktır. 
 
-Sisteme girdikten sonra zafiyetli sırdaki bölümde inceleyeceğimiz kernel modülünü ve en son yazıcağımız 
-root exploitini root'un ev dizininde (`/root`) bulabilirsiniz. Exploitimizi aşama aşama yazacağımızdan size 
+Sisteme girdikten sonra zafiyetli sırdaki bölümde inceleyeceğimiz kernel modülünü
+root'un ev dizininde (`/root`) bulabilirsiniz. Exploitimizi aşama aşama yazacağımızdan size 
 önerim kendi exploitiniz için ayrı bir dizin oluşturmanızdır.
 
-Ve evet makinede `vim` editörü ile beraber exploitinizi derlemek için gerekli olacak temel araçlar mevcut.
-Yani onları indirmek ile uğraşmak zorunda değilsiniz.
+Ve evet makinede `vim` editörü ve `tmux` çoklu pencere yöneticisi ile beraber exploitinizi 
+derlemek için gerekli olacak temel araçlar mevcut. Yani onları indirmek ile uğraşmak zorunda değilsiniz.
 
 ---
 [Önceki](kernel.md) | [Sıradaki](deeper.md)

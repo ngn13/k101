@@ -1,4 +1,4 @@
-**NOT:** Kernel'in türkçesi olan "çekirdek" tam olarak anlamı karşılamadığından çeviride kullanmadım.
+**NOT:** Kernel'in Türkçe karışılığı olan "çekirdek" kelimesi tam olarak anlamını karşılamadığı için kullanmadım.
 
 # Kernel'e genel bir bakış
 Linux kernel'i oldukça geniş çaplı bir proje, her gün dünyanın her tarafından geliştiriciler 

