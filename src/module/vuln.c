@@ -23,9 +23,8 @@ static unsigned long procfs_buffer_size = 0;
 static char procfs_buffer[MAX_SIZE];
 
 static ssize_t procfile_read(
-    struct file *file, char *buffer, size_t count, loff_t *offset)
-{
-
+    struct file *file, char *buffer, size_t count, loff_t *offset){
+  
   char local[MAX_SIZE];
 
   memcpy(local, procfs_buffer, MAX_SIZE);
@@ -33,13 +32,11 @@ static ssize_t procfile_read(
   memcpy(buffer, local, count);
 
   return count;
-
 }
 
 static ssize_t procfile_write(
-    struct file *file, const char *buffer, size_t count, loff_t *offset)
-{
-
+    struct file *file, const char *buffer, size_t count, loff_t *offset){
+  
   char local[8];
   procfs_buffer_size = count;
 
@@ -50,7 +47,6 @@ static ssize_t procfile_write(
   printk(KERN_INFO "[vuln]: Copied to buffer: %s\n", local);
 
   return procfs_buffer_size;
-
 }
 
 static struct proc_ops fops = {
@@ -58,9 +54,7 @@ static struct proc_ops fops = {
   .proc_write = procfile_write,
 };
 
-int init_module()
-{
-
+int init_module(){
   proc_file = proc_create(DEV_NAME, 0666, NULL, &fops);
   memset(procfs_buffer, 'A', MAX_SIZE);
 
@@ -72,20 +66,13 @@ int init_module()
 
   printk(KERN_INFO "[vuln] /proc/%s created\n", DEV_NAME);
   return 0;
-
 }
 
-void cant_get_here(void)
-{
-
+void cant_get_here(void){
   printk(KERN_INFO "[vuln] How did we get here?\n");
-
 }
 
-void cleanup_module()
-{
-
+void cleanup_module(){
   remove_proc_entry(DEV_NAME, NULL);
   printk(KERN_INFO "[vuln] /proc/%s removed\n", DEV_NAME);
-
 }

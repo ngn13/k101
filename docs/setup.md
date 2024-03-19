@@ -16,7 +16,7 @@ scriptini çalıştırarak root dosya sistemini inşa edebilirsiniz.
 **Eğer arch tabanlı bir dağıtımda değilseniz** merak etmeyin! Önceden inşa edilmiş bir dosya sistemini 
 kullanabilirsiniz:
 - [root.tar.gz](https://files.ngn.tf/k101/root.tar.gz) (1.7G - Arşivden çıkarınca 6GB)
-- **SHA256 imzası**: `feb9cd20f01048620a50331e566053e96b925dfbace26478bb6351b765cc54b1`
+- **SHA256 imzası**: `7d9fbd9ef91310aaffb415daa7405ecec6e31a37352560885bd814c1087a127b`
 
 [Bu araçları kurduktan sonra](https://www.kernel.org/doc/html/latest/process/changes.html)
 kernel'i indirmek ve derlemek için `kernel.sh` scriptini çalıştırın. Dilerseniz `vars.sh` 
