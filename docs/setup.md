@@ -1,4 +1,4 @@
-# Lab ortamını ayarlamak
+# Lab ortamını kurmak 
 Makinenizde hali hazırda bir KVM/QEMU sanallaştırma ortamınız olduğunu varsayıyor 
 olacağım, ancak yoksa, distronuzdaki `qemu` ve `libvirt` paketlerini kurarak bunu yapabilirsiniz.
 
@@ -10,17 +10,19 @@ git clone https://github.com/ngn13/k101.git
 ```bash
 cd k101/src
 ```
-**Eğer Arch tabanlı bir dağıtımdaysanız** önce `arch-install-scripts` paketini kurup ardından `root.sh` 
-scriptini çalıştırarak root dosya sistemini inşa edebilirsiniz. 
+Şimdi sıra root dosya sistemi ve de kerneli inşa etmekte:
+- **Kerneli derlemek:** [Bu araçları kurduktan sonra](https://www.kernel.org/doc/html/latest/process/changes.html), 
+`kernel.sh` scriptini çalıştırmanız yeterli, dilerseniz `vars.sh` scripti ile oynayarak versiyonu değiştirebilirsiniz
+- **Root dosya sistemini inşa etmek:** `root.sh` scriptini çalıştırmanız yeterli, bu script
+`arch-install-scripts` üzerinden çalıştığından **sadece arch tabanlı dağıtımlarda çalışacaktır.**
 
-**Eğer arch tabanlı bir dağıtımda değilseniz** merak etmeyin! Önceden inşa edilmiş bir dosya sistemini 
-kullanabilirsiniz:
-- [root.tar.gz](https://files.ngn.tf/k101/root.tar.gz) (1.7G - Arşivden çıkarınca 6GB)
-- **SHA256 imzası**: `7d9fbd9ef91310aaffb415daa7405ecec6e31a37352560885bd814c1087a127b`
+**Arch tabanlı bir dağıtımda değilseniz** ya da basitçe **önceden derlenmiş dosya sistemi ve de kerneli
+tercih ediyorsanız**, o zaman yukarıda bahsi geçen ile inşa edilmiş hazır dosya sistemini ve de
+kernel'i kullanabilirsiniz:
 
-[Bu araçları kurduktan sonra](https://www.kernel.org/doc/html/latest/process/changes.html)
-kernel'i indirmek ve derlemek için `kernel.sh` scriptini çalıştırın. Dilerseniz `vars.sh` 
-scripti ile oynayarak kernel versiyonunu değiştirebilirsiniz.
+- [k101.tar.gz](https://files.ngn.tf/p/k101.tar.gz) (1.7G - Arşivden çıkarınca 6GB)
+- **PGP imzası**: [k101.tar.gz.sig](https://files.ngn.tf/p/k101.tar.gz.sig) 
+- **SHA256 imzası**: `f287c43c975a072df01a719ee614cb4f2c2b0e80d1b8a00da5ec8d77a04b0631`
 
 Root sistemi hazırladıktan sonra ve kernel'i başarı ile derledikten sonra sistemi başlatmak adına 
 `qemu.sh` scriptini çalıştırın. Kernele verilen argümanlar ile oynamak adına yine `vars.sh` 

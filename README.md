@@ -1,14 +1,9 @@
-```
- __________________
-< welcome to k101! >
- ------------------
-        \   ^__^
-         \  (oo)\_______
-            (__)\       )\/\
-                ||----w |
-                ||     ||
-```
-# k101 | Kernel kırmanın temellerini öğrenin 
+<h1 align="center">
+  <img width="640px" src="assets/banner.png">
+  </br>
+  </br>
+  k101 | Kernel kırmanın temellerini öğrenin 
+</h1>
 
 k101 size kernel kırmanın temellerini öğretecek 
 ve biraz pratik yapmanızı sağlayacak küçük bir rehber.

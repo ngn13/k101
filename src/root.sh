@@ -33,15 +33,17 @@ $SUDO chroot mnt /bin/bash -c "echo k101 > /etc/hostname"
 $SUDO chroot mnt /bin/bash -c "systemctl enable dhcpcd"
 $SUDO chroot mnt /bin/bash -c "systemctl enable sshd"
 $SUDO sh -c 'echo "cowsay welcome to k101!" >> mnt/root/.profile'
-$SUDO cp sshd mnt/etc/ssh/sshd_config
-$SUDO cp vimrc mnt/root/.vimrc
+$SUDO cp files/vimrc mnt/root/.vimrc
+$SUDO cp files/sshd  mnt/etc/ssh/sshd_config
 
 echo ">> Installing kernel headers"
-cd linux 
-$SUDO make INSTALL_MOD_PATH=$PWD/../mnt modules_install
-$SUDO rm -rf ../mnt/lib/modules/$KERNEL_VERSION/build
-cd ..
-$SUDO cp -r linux mnt/lib/modules/$KERNEL_VERSION/build
+pushd linux 
+  $SUDO make INSTALL_MOD_PATH="${PWD}/../mnt" modules_install
+  $SUDO rm -rf "../mnt/lib/modules/${KERNEL_VERSION}/build"
+popd
+$SUDO cp -r linux "mnt/lib/modules/${KERNEL_VERSION}/build"
+$SUDO rm -r "mnt/lib/modules/${KERNEL_VERSION}/build"/vmlinux*
+$SUDO rm -r "mnt/lib/modules/${KERNEL_VERSION}/build"/arch/*/boot
 
 $SUDO umount mnt
 echo ">> Installation completed"

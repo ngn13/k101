@@ -1,4 +1,6 @@
 src/*.raw
+src/bzImage
 src/*.tar.gz
+src/*.sig
 src/linux
 src/mnt
