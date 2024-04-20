@@ -1,7 +1,6 @@
 <h1 align="center">
   <img width="640px" src="assets/banner.png">
   </br>
-  </br>
   k101 | Kernel kırmanın temellerini öğrenin 
 </h1>
 
