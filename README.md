@@ -1,10 +1,10 @@
 <h1 align="center">
   <img width="640px" src="assets/banner.png">
   </br>
-  k101 | Kernel kırmanın temellerini öğrenin 
+  k101 | Kernel kırmanın temellerini öğrenin
 </h1>
 
-k101 size kernel kırmanın temellerini öğretecek 
+k101 size kernel kırmanın temellerini öğretecek
 ve biraz pratik yapmanızı sağlayacak küçük bir rehber.
 
 ### Başlarken...
@@ -14,12 +14,9 @@ ve biraz pratik yapmanızı sağlayacak küçük bir rehber.
 - Genel linux tabanlı sistem bilgisi
 - Genel C bilgisi
 
-### Bir sorun mu var? 
+### Bir sorun mu var?
 Eğer yardıma ihtiyaç duyarsanız, herhangi bir sorun yaşarsanız
 bir [issue oluşturmaktan çekinmeyin](https://github.com/ngn13/k101/issues)
-
-Sorularınız varsa ve doğrudan iletişime geçmek istiyorsanız [bu XMPP sohbet odasına](xmpp:penguintux@conference.jabbers.one)
-katılabilirsiniz
 
 ### Hazır mısın?
 Herşey tamamsa, aşağıdaki linkleri kullanarak macerana başlayabilirsin.
