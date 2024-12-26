@@ -1,6 +1,6 @@
 # ...ve son! Ya da öyle mi?
 k101 burda sonlanıyor. Açıkçası ben bu içeriği genişletmek istiyorum, eğer bu kernel zafiyetleri
-konusunda bilgili iseniz lütfen katkıda bulunmaktan çekinmeyin! Eğer değilseniz bu içeriğe 
+konusunda bilgili iseniz lütfen katkıda bulunmaktan çekinmeyin! Eğer değilseniz bu içeriğe
 ilgili olduğunuzu belirtmek için bir yıldız bırakın.
 
 Ben bu içerik üzerinde çalışmalara devam ederken işte okumaya ve kırmaya devam etmeniz adına birkaç

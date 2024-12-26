@@ -9,24 +9,25 @@ ve biraz pratik yapmanızı sağlayacak küçük bir rehber.
 
 ### Başlarken...
 İşte bilmeniz gereken bazı şeyler ve ön gereksinimler:
-- Lab ortamınızı kurabilmeniz adına bir KVM/QEMU kurulumu
-- Genel bellek yönetimi ve ASM bilgisi
-- Genel linux tabanlı sistem bilgisi
-- Genel C bilgisi
+- Farklı pratikleri çalıştırmak adına KVM/QEMU kurulumu
+- Genel GNU/Linux tabanlı sistem bilgisi
+- Genel bellek yönetimi ve C ve ASM bilgisi
+
+Bu rehber aynı zamanda farklı CTF challengeları üzerinden ilerleyeceğinden,
+büyük ihtimalle CTF'ler hakkında da bilginiz olması gerekecek.
 
 ### Bir sorun mu var?
 Eğer yardıma ihtiyaç duyarsanız, herhangi bir sorun yaşarsanız
-bir [issue oluşturmaktan çekinmeyin](https://github.com/ngn13/k101/issues)
+bir [issue oluşturmaktan çekinmeyin](https://github.com/ngn13/k101/issues).
+
+Ayrıca [doğrudan bana](mailto:ngn@ngn.tf) da ulaşabilirsiniz.
 
 ### Hazır mısın?
 Herşey tamamsa, aşağıdaki linkleri kullanarak macerana başlayabilirsin.
 
 İyi eğlenceler!
 
-| Bölüm           | Açıklama                                      | Link                            |
-| --------------- | --------------------------------------------- | ------------------------------- |
-| Kernel 101      | Kernel hakkında genel bilgi edinin            | [kernel.md](docs/kernel.md)     |
-| Kurulum         | Pratik ortamını nasıl kuracağınızı öğrenin    | [setup.md](docs/setup.md)       |
-| Derinlere inmek | Zafiyetli kernel modülünü yakından inceleyin  | [deeper.md](docs/deeper.md)     |
-| İlk exploit     | İlk kernel exploitinizi yazın                 | [first.md](docs/first.md)       |
-| ret2root        | Exploitiniz ile root alın                     | [ret2root.md](docs/ret2root.md) |
+| Bölüm                     | Açıklama                                                                      | Link                                     |
+| ------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------  |
+| Giriş                     | Kernel hakkında genel bilgi edinin                                            | [kernel.md](docs/intro.md)               |
+| Kernel Advantures Part 2  | Sistem çağrılarını anlayın ve zaafiyetli bir sistem çağrısını kötüye kullanın | [kernel.md](docs/kernel_adventures_2.md) |
