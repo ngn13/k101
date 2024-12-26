@@ -1,3 +1,3 @@
 
 ---
-[Önceki](README.md) | [Sonraki](kernel_advantures_2.md.md)
+[Önceki](README.md) | [Sonraki](kernel_adventures_2.md)

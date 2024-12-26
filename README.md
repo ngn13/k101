@@ -27,7 +27,7 @@ Herşey tamamsa, aşağıdaki linkleri kullanarak macerana başlayabilirsin.
 
 İyi eğlenceler!
 
-| Bölüm                     | Açıklama                                                                      | Link                                     |
-| ------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------  |
-| Giriş                     | Kernel hakkında genel bilgi edinin                                            | [kernel.md](docs/intro.md)               |
-| Kernel Advantures Part 2  | Sistem çağrılarını anlayın ve zaafiyetli bir sistem çağrısını kötüye kullanın | [kernel.md](docs/kernel_adventures_2.md) |
+| Bölüm                     | Açıklama                                                                      | Link                                                   |
+| ------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Giriş                     | Kernel hakkında genel bilgi edinin                                            | [kernel.md](docs/intro.md)                             |
+| Kernel Advantures Part 2  | Sistem çağrılarını anlayın ve zaafiyetli bir sistem çağrısını kötüye kullanın | [kernel_adventures_2..md](docs/kernel_adventures_2.md) |
