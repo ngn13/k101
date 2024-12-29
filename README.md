@@ -4,11 +4,12 @@
   k101 | Kernel kırmanın temellerini öğrenin
 </h1>
 
-k101 size kernel kırmanın temellerini öğretecek
+k101 size (`x86_64`) kernel kırmanın temellerini öğretecek
 ve biraz pratik yapmanızı sağlayacak küçük bir rehber.
 
 ### Başlarken...
 İşte bilmeniz gereken bazı şeyler ve ön gereksinimler:
+
 - Farklı pratikleri çalıştırmak adına KVM/QEMU kurulumu
 - Genel GNU/Linux tabanlı sistem bilgisi
 - Genel bellek yönetimi ve C ve ASM bilgisi
@@ -31,3 +32,5 @@ Herşey tamamsa, aşağıdaki linkleri kullanarak macerana başlayabilirsin.
 | ------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------ |
 | Giriş                     | Kernel hakkında genel bilgi edinin                                            | [kernel.md](docs/intro.md)                             |
 | Kernel Advantures Part 2  | Sistem çağrılarını anlayın ve zaafiyetli bir sistem çağrısını kötüye kullanın | [kernel_adventures_2..md](docs/kernel_adventures_2.md) |
+| Babydriver (SMEP yok)     | UAF zafiyetini kötüye kullanarak ret2usr yöntemi ile root alın                | [babydriver_no_smep.md](docs/babydriver_no_smep.md)    |
+| Babydriver                | ROP kullanarak SMEP'i bypass edin                                             | [babydriver.md](docs/babydriver.md)                    |

