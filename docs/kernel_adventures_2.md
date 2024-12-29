@@ -187,8 +187,9 @@ struct cred {
 	kgid_t		egid;		/* effective GID of the task */
     ...
 ```
-Bu cred'lerin modifiyesi için `commit_creds()` fonksiyonu kullanılıyor. Bu fonksiyon kendisine verilen yeni cred yapısı, `current` olarak adlandırılan
-anlık işleme veriyor. Ve yeni cred'ler oluşturmak için de, `prepare_creds()` fonksiyonu kullanılıyor.
+Bu cred'lerin modifiyesi için `commit_creds()` fonksiyonu kullanılıyor. Bu fonksiyon kendisine verilen yeni `cred` yapısı, `current` olarak adlandırılan
+anlık işleme veriyor, bunun için anlık işlemin kullandığı `task_struct` yapısında bulunan `cred` pointer'ını güncelliyor. Ve yeni cred'ler oluşturmak
+için de, `prepare_creds()` fonksiyonu kullanılıyor.
 
 Peki bu sistem çağrısı UID'leri nasıl takip ediyor? Gördüğünüz gibi `nextId` isimli bir değeri var:
 ```diff

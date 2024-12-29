@@ -1,4 +1,4 @@
-# Ne olaki bu kernel?
+# Kernel Nedir?
 Gündelik bilgisayar kullanımında, kullanıcıların etkilişime geçtiği, işletim sistemini oluşturan parçalar,
 doğrudan donanım ile haberleşmez. İşlemcinin üzerinde çalıştığı yazılıma sunduğu farklı ayrıcalık (privilege) seviyeleri
 bulunmaktadır.
@@ -19,7 +19,7 @@ Ve yine bu sebepten ötürü, özellikle bu rehberde hedeflediğimiz Linux kerne
 gece ve gündüz yüzlerce hatta binlerce güvenlik uzmanı tarafından incelenmektedir. Yani kernel'i kırması imkansız mı? Cevabı evet olsa
 bu rehberi yazıyor olmazdım.
 
-### Farklı baskı noktaları
+### Farklı Baskı Noktaları
 Kernel aktif olarak yüz binlerce geliştirici tarafından geliştirildiği için, mainline kernel tree'sinde farklı aralıklarla ciddi zafiyetlere
 rastlanabiliyor. Fakat bunun dışında kernel'in özgür ve açık kaynaklı olduğunu unutmamanız lazım. Linux kernel'i modüler bir yapıya sahip olduğundan
 farklı organizasyonlar kendi kişisel kullanımları için kendi kernel modüllerini yazabilir. Bu tree dışı (out-of-tree, OOT) modüler, kendi başlarına
@@ -28,7 +28,7 @@ bir güvenlik problemi de oluşturabilir.
 Bu sebepten ötürü, kernel güvenliğini öğrenmek kesinlikle zaman kaybı değildir. Bunun yanı sıra, kernel güvenliğini öğrenirken birçok yeni
 şey de keşefedebilirsiniz.
 
-# Kernel mode vs. User mode
+# Kernel Mode vs. User Mode
 User mode (userland, user-space), kullanıcı programlarının çalıştığı ayrıcalık seviyesine verilen isimdir. Öte yandan kernel mode (kernel-space), kernel'in
 çalıştığı ayrıcalık seviyesine verilen isimdir. Bunlardan ring 3 (user mode) ve ring 0 (kernel mode) olarak bahsedildiğini de duymuş olabilirsiniz.
 Bu "ring" isimlendirmesi, işlemci dışında, tüm donanım bileşenlerinin farklı ayrıcalık seviyeleri arasında sunduğu korumaları kapsar. Evet, bu "ring"ler
@@ -56,7 +56,7 @@ TCP ve IP paketlerini bit bit inşa etmenize gerek kalmaz, çünkü kernel bu si
 
 Kernel'in sunduğu bu arayüz, user mode'dan kernel'e geçiş yapmanın tek yoludur. Bu arayüz, sistem çağrılarıdır.
 
-### Sistem çağrılarını anlamak
+### Sistem Çağrılarını Anlamak
 Sistem çağrılarını, istediğiniz zaman elinizin altında olan, kernel tarafından yönetilen bir dizi fonksiyon gibi düşünebilirsiniz. Linux'da, 64 bit'de bu çağrılar,
 `syscall` instruction'ı aracılığı ile sağlanır. Bu AMD'nin özel olarak 64 bit mimarsi için geliştirdiği, Intel'in `sysenter` instruction'ına banzer olarak çalışan
 bir instruction'dır. Öte yandan, `sysenter`dan farklı olarak bu instruction, [iki farklı işlemci modelinde de çalışır](https://wiki.osdev.org/SYSENTER#Compatibility_across_Intel_and_AMD).
@@ -96,7 +96,7 @@ int main(){
 }
 ```
 
-### Zafiyetlere erişmek
+### Zafiyetlere Erişmek
 Linux'da herşeyin bir dosya olduğunu biliyoruz. Bu sistem çağrılarını kullanarak zaafiyetli bir karakter veya cihaz sürücüsüne erişebiliriz. Eğer bu sürücünün implementasyonu
 kendisinden beklenen sistem çağrılarını doğru şekilde implemente etmiyorsa, bu bir zaafiyete sebebiyet verebilir, ve basit dosya işlemi çağrıları ile bu zaafiyeti kötüye
 kullanabilirsiniz.
@@ -114,11 +114,11 @@ doğrudan donanım erişimi verip, bunu kötüye kullanabilirsiniz.
 
 Anlayacağınız birçok farklı saldırı vektörü söz konusu, fakat kernel mode'a geçip bu vekötere erişmek, genel olarak sistem çağrıları aracılığı ile gerçekleştirilir.
 
-### Kernel bellek korumaları
+### Kernel Bellek Korumaları
 User mode'daki programların RELRO, ASLR ya da stack çerezleri gibi, bazıları kernel tarafından sağlanan bellek korumalarına sahip olduğunu biliyor olabilirsiniz. Kernel'de de
 benzeri korumalar mevcut, ve yeri geldiğinde bu korumlardan bahsediyor olacağız. Fakat hızlıca temel korumaları bir özet geçelim.
 
-#### KASLR (Kernel address space layout randomization)
+#### KASLR (Kernel Address Space Layout Randomization)
 Normal şartlar altında, kernel belleğe her yüklendiğinde aynı adrese yüklenir. Bundan kaynaklı olarak
 kernel ile beraber belleğe yüklenen fonksiyon ve benzeri semboller de aynı adrese yüklenir. Örneğin `prepare_kernel_cred` `0xffffffff81094a50` adresine yüklenmiş
 olsun, bu adres sistem yeniden başlatıldığında değişmeyecektir. Bu durum herhangi bir kritik fonksiyonun adresini bilen bir saldırganın, kernelin akışını yönlendirmesini
@@ -133,8 +133,8 @@ bu offset hesaplanıp, KASLR kırılabilir.
 #### Stack Cookies
 User-space'de olan çerezlere benzer olarak, kernel-space bellekteki stack üzerine bir "çerez" yerleştirir. Eğer program akışında bu çerez herhangi bir
 şekilde değiştirilirse, stack üzerindeki belleği değişmesine sebebiyet veren **buffer overflow** gibi bir zafiyet exploit edilmeye çalışılmıştır demektir. Bu durumda kernelde
-exploit edilmeye çalışılan mümkün bir zafiyet olduğundan, `__stack_chk_fail()` fonksiyonu çağrılır, kernel panikler ve sistemin çalışmasını durdurur. Kernel paniklerinden az
-sonra daha detaylı bahsedeceğiz.
+exploit edilmeye çalışılan mümkün bir zafiyet olduğundan, `__stack_chk_fail()` fonksiyonu çağrılır, [kernel panikler](https://en.wikipedia.org/wiki/Kernel_panic) ve sistemin
+çalışmasını durdurur.
 
 Bunun imeplementasyonu, user-space impelemetasyonuna benzer şekilde, gerekli görülen yerlere, stack'e bu çerezleri push'layan, ve dönüşlerden
 önce bu çerezleri kontrol eden instructionlar yerleştirmekten geçer.
@@ -164,12 +164,17 @@ Bunun implementasyonu, SMEP'e benzer bir şekilde işlemci tarafından sağlanı
 
 Bunu kırmanın tek yolu user-mode'a hiçbir şekilde geri dönüş yapmamaktır. Tüm exploit ROP aracılığı ile sağlanmalıdır ve de exploit kernel belleğinde tutulmalıdır.
 
-#### KAISER (KPTI, PTI, Kernel page-table isolation)
-Meltdown gibi CPU'dan kaynaklı ortaya çıkan side-channel zafiyetleri önlemek adına ortaya çıkmıştır. Bu koruma, kernel-space instruction'larına giriş yapıldığında kernel'in user-space
-belleğini tamamı ile kopyalamasını sağlar, kernel-space'de iş bittiğinde user-space kopyası kullanılmaya devam edilir. Bu durum, kernel-space bellek ile user-space belleği birbirinden
-tamamen ayrır. Bu şekilde saldırganın bir zafiyet aracılığı ile kernel'i user-space'e eriştirme olanağı tamamen ortadan kalkar. KAISER kernel parametrelerine `nopti` eklenerek kapatılabilir.
+#### KPTI (Kernel Page-Table Isolation, PTI)
+KASLR her ne kadar adresleri rastgele bir hale getirse de, meltdown ve spectre gibi, [modern işlemcilerdeki side-channel saldırıları](https://www.youtube.com/watch?v=x_R1DeZxGc0),
+kernel-space'den bir adresin leaklenmesine ve KASLR'ın kırılmasına sebebiyet verebilir.
 
-Bunun implementasyonu, kernel tarafından user-mode ve kernel-mode için ayrı sayfalandırma tabloları tutarak sağlanır. Kırmak içi basitçe, bu tablolar arasında geçiş yapmada kullanılan
+Bunu önlemek adına [KAISER (Kernel Address Isolation to have Side-channels Efficiently Removed)](https://gruss.cc/files/kaiser.pdf) ortaya atıldı. Bu korumanın temel fikri,
+user-mode'a geçmeden önce sayfalandırma tablosunu, kernel'deki sadece minimal bir oranda belleği sayfalandıran başka bir tablo ile değiştirmek. Bu sayede, user-mode'da çalışan
+bir program, bu side-channel saldırıları ile kernel'den kritik bir belleği, sayfalandırılmadığı için leaklemeyez.
+
+KAISER'ın orijinal implementasyonunda bazı değişikler yapıldıktan sonra, KPTI olarak yeniden adlandırıldı. KPTI kernel parametrelerine `nopti` eklenerek kapatılabilir.
+
+Bunun implementasyonu, kernel tarafından her işlem için iki ayrı sayfalandırma tablosu tutularak sağlanır. Kırmak içi basitçe, bu tablolar arasında geçiş yapmada kullanılan
 `.Lpti_restore_regs_and_return_to_usermode` label'ı kullanılabilir. Tek yapmanız gereken bunu ROP'ununza eklemek olacaktır.
 
 Artık kernel'i daha iyi anladığımıza göre, rehberi nasıl takip ediceğinizi açıkladıktan sonra ilk pratiğimiz ile işe başlayabiliriz. Merak etmeyin, burada anlatılan konseptleri,
