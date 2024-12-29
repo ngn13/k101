@@ -3,7 +3,7 @@ Bu bölümde bir CTF challenge'ı çözüyor olacağız:
 
 - **İsim**: Kernel Adventures: Part 2
 - **Kaynak**: [HackTheBox](https://app.hackthebox.com/challenges/Kernel%2520Adventures%253A%2520Part%25202)
-- **Link**: [challenge.tar.gz](../src/kernel_adventrues_2/challenge.tar.gz)
+- **Link**: [challenge.tar.gz](../src/kernel_adventures_2/challenge.tar.gz)
 
 Bu challenge giriş düzeyi için tam olarak aradığımız şey. Amacımız oldukça basit, bize verilen makinede root almak.
 
