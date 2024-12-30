@@ -1,10 +1,10 @@
 <h1 align="center">
   <img width="640px" src="assets/banner.png">
   </br>
-  k101 | Kernel kırmanın temellerini öğrenin
+  kernel 101 | Kernel kırmanın temellerini öğrenin
 </h1>
 
-k101 size (`x86_64`) kernel kırmanın temellerini öğretecek
+Size (`x86_64`) kernel kırmanın temellerini öğretecek
 ve biraz pratik yapmanızı sağlayacak küçük bir rehber.
 
 ### Başlarken...
@@ -23,7 +23,7 @@ büyük ihtimalle CTF'ler hakkında da bilginiz olması gerekecek.
 
 ### Bir sorun mu var?
 Eğer yardıma ihtiyaç duyarsanız, herhangi bir sorun yaşarsanız
-bir [issue oluşturmaktan çekinmeyin](https://github.com/ngn13/k101/issues).
+bir [issue oluşturmaktan çekinmeyin](https://github.com/ngn13/kernel-101/issues).
 
 Ayrıca [doğrudan bana](mailto:ngn@ngn.tf) da ulaşabilirsiniz.
 

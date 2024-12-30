@@ -1,5 +1,5 @@
 # ...ve son! Ya da öyle mi?
-k101 burda sonlanıyor. Açıkçası ben bu içeriği genişletmek istiyorum, eğer bu kernel zafiyetleri
+kernel 101 burada sonlanıyor. Açıkçası ben bu içeriği genişletmek istiyorum, eğer bu kernel zafiyetleri
 konusunda bilgili iseniz lütfen katkıda bulunmaktan çekinmeyin! Eğer değilseniz bu içeriğe
 ilgili olduğunuzu belirtmek için bir yıldız bırakın.
 
