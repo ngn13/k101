@@ -16,7 +16,7 @@ ve biraz pratik yapmanızı sağlayacak küçük bir rehber.
 
 Bunun yanı sıra, bellek zaafiyetleri ve nasıl kötüye kullanılabileceklerini
 bilmeniz gerekiyor, bu bilgiye sahip değilseniz endişelenmeyin,
-[birileri bunun için de bir kaynak yazmış :)](https://github.com/ngn13/o101).
+[birileri bunun için de bir kaynak yazmış :)](https://github.com/ngn13/overflow-101).
 
 Bu rehber aynı zamanda farklı CTF challengeları üzerinden ilerleyeceğinden,
 büyük ihtimalle CTF'ler hakkında da bilginiz olması gerekecek.
